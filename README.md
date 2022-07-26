@@ -17,7 +17,7 @@ Add your package registry server url as remote:
 conan remote add <remote_name> <url>
 ```
 
-## Upload to remote
+## Upload to remote
 
 Upload local changes/builds to remote:
 
