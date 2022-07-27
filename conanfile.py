@@ -24,21 +24,27 @@ class Libsearpc(ConanFile):
     # copy cmake source files into libsearpc
     exports_sources = "libsearpc/*"
 
+    _cmake = None
+
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
 
+    def _configure_cmake(self):
+        if self._cmake:
+            return self._cmake
+        self._cmake = CMake(self)
+        self._cmake.definitions["BUILD_SHARED"] = self.options.shared
+        self._cmake.configure(source_folder="libsearpc")
+        return self._cmake
+        
     def build(self):
-        cmake = CMake(self)
-        cmake.definitions["BUILD_SHARED"] = self.options.shared
-        cmake.configure(source_folder="libsearpc")
+        cmake = self._configure_cmake()
         cmake.build()
 
     def package(self):
-        self.copy("*.dll", dst="bin", keep_path=False)
-        self.copy("*.so", dst="lib", keep_path=False)
-        self.copy("*.dylib", dst="lib", keep_path=False)
-        self.copy("*.a", dst="lib", keep_path=False)
+        cmake = self._configure_cmake()
+        cmake.install()
 
     def package_info(self):
         self.cpp_info.libs = ["searpc"]
