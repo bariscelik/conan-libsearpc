@@ -6,7 +6,7 @@ class Libsearpc(ConanFile):
     version = "3.2-latest"
     license = ("Apache-2.0")
     author = "Barış Çelik bariscelikweb@gmail.com"
-    url = "https://github.com/bariscelik/libsearpc"
+    url = "https://github.com/bariscelik/conan-libsearpc"
     description = "Searpc is a simple C language RPC framework based on GObject system. Searpc handles the serialization/deserialization part of RPC, the transport part is left to users."
     topics = ("rpc", "serialization", "deserialization")
     settings = "os", "compiler", "build_type", "arch"
@@ -25,6 +25,11 @@ class Libsearpc(ConanFile):
     exports_sources = "libsearpc/*"
 
     _cmake = None
+
+    def requirements(self):
+      if self.settings.os == "Windows":
+         self.requires("getopt-for-visual-studio/20200201")
+         self.requires("pthreads4w/3.0.0")
 
     def config_options(self):
         if self.settings.os == "Windows":
