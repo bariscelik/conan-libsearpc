@@ -12,10 +12,9 @@ conan_basic_setup()
 
 set(SOURCES searpc-client.c searpc-server.c searpc-utils.c searpc-named-pipe-transport.c)
 
+add_library(searpc_static STATIC ${SOURCES})
 if(BUILD_SHARED)
 add_library(searpc SHARED ${SOURCES})
-else()
-add_library(searpc STATIC ${SOURCES})
 endif()
 
 add_definitions(-DG_LOG_DOMAIN="Searpc")
@@ -30,6 +29,9 @@ file(GLOB_RECURSE HDRS *.h)
 set_target_properties(searpc 
 PROPERTIES VERSION ${SEARPC_VERSION_STRING} 
 PUBLIC_HEADER "${HDRS}")
+
+set_target_properties(searpc_static 
+PROPERTIES OUTPUT_NAME searpc)
 
 install(TARGETS searpc)
 
